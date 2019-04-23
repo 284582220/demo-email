@@ -1,0 +1,71 @@
+生产环境旧的topic列表：
+YZEVENT-yingzi.center.human.log.topic
+YZEVENT-yz.breeding.app-pig.litter
+YZEVENT-yz.breeding.app-pig.location.status
+YZEVENT-yz.breeding.app-pig.physical.status
+YZEVENT-yz.center.alarm.cancel
+YZEVENT-yz.center.alarm.close
+YZEVENT-yz.center.alarm.ignore
+YZEVENT-yz.center.alarmEvent.ignore
+YZEVENT-yz.center.alarmEvent.process
+YZEVENT-yz.center.notice.confirm
+YZEVENT-yz.center.notice.receive
+YZEVENT-yz.nutrition-feedAndLight
+YZEVENT-yz.nutrition.prod-feed.calc.finish
+YZEVENT-yz.pigidentity.event-identity.event
+YZEVENT-yz.pigidentity.yingzi-prod-identity.event
+__consumer_offsets
+kafka_share_topic
+yingzi-iot-topic
+
+
+kafka认证用户名密码：
+生物中心           biologicalCenterAdmin            qhOM8X6d
+营养中心           nutritionCenterAdmin             iZo4qAhH
+种猪中心           breedingCenterAdmin              NtkhN9Zv
+基因中心           geneticCenterAdmin               YiMwRyAO
+身份中心           pigidentityCenterAdmin           LEZP6RBm
+IOT中心            iotCenterServerAdmin             LONpxniG
+IOT黑盒子          iotCenterClientAdmin             uI1BpIYw
+任务中心           taskCenterAdmin                  4N9W5Iz9
+告警中心           alarmCenterAdmin                 5TnZDIXs
+人力中心           humanCenterAdmin                 RMDKkz53
+目标与排名中心     metricRankingCenterAdmin         fUEvR4GV
+任务编排中心       taskSchedulCenterAdmin           zak0HmRN
+
+
+user_producer="5ApsTaLR"
+user_consumer="g7R2rSsW"
+
+
+生产环境：zookeeper-prod01.yingzi.com:2181,zookeeper-prod02.yingzi.com:2181,zookeeper-prod03.yingzi.com:2181/kafkaRoot
+
+
+zookeeper-test.yingzi.com:2181,zookeeper-test.yingzi.com:2182,zookeeper-test.yingzi.com:2183
+
+zookeeper-kafka-dev.yingzi.local:2181,zookeeper-kafka-dev.yingzi.local:2182,zookeeper-kafka-dev.yingzi.local:2183
+
+./bin/kafka-topics.sh --list --zookeeper zookeeper-kafka-dev.yingzi.local:2181,zookeeper-kafka-dev.yingzi.local:2182,zookeeper-kafka-dev.yingzi.local:2183/kafkaRoot
+
+# 生产者命令
+./bin/kafka-console-producer.sh --broker-list kafka-pre-prod.yingzi.com:9094,kafka-pre-prod.yingzi.com:9095,kafka-pre-prod.yingzi.com:9096 --topic yz.breedingcenter.pigstatus.physical  --producer-property security.protocol=SASL_PLAINTEXT --producer-property sasl.mechanism=PLAIN
+
+# 消费者命令
+./bin/kafka-console-consumer.sh  --bootstrap-server kafka-pre-prod.yingzi.com:9094,kafka-pre-prod.yingzi.com:9095,kafka-pre-prod.yingzi.com:9096   --topic 	yz.breedingcenter.pigstatus.physical --consumer-property security.protocol=SASL_PLAINTEXT --consumer-property sasl.mechanism=PLAIN --consumer-property group.id=3 --consumer-property   client.id=5  
+
+./bin/kafka-consumer-groups.sh --bootstrap-server  kafka_prod01.yingzi.com:9094,kafka_prod02.yingzi.com:9094,kafka_prod03.yingzi.com:9094  --describe --group yz-logical-task --command-config   ./config/grouprop.properties
+
+./bin/kafka-consumer-groups.sh --bootstrap-server kafka_prod01.yingzi.com:9094,kafka_prod02.yingzi.com:9094,kafka_prod03.yingzi.com:9094 --list --command-config ./config/grouprop.properties
+
+
+./bin/kafka-topics.sh --describe --zookeeper zookeeper-pre-prod.yingzi.com:2181,zookeeper-pre-prod.yingzi.com:2182,zookeeper-pre-prod.yingzi.com:2183/kafkaRoot --topic yz.breedingcenter.pigstatus.physical
+ 
+./bin/kafka-consumer-groups.sh --bootstrap-server kafka-pre-prod.yingzi.com:9094,kafka-pre-prod.yingzi.com:9095,kafka-pre-prod.yingzi.com:9096 --describe --group 2
+
+
+
+
+./bin/kafka-acls.sh --authorizer-properties zookeeper.connect=zookeeper-kafka-dev.yingzi.local:2181,zookeeper-kafka-dev.yingzi.local:2182,zookeeper-kafka-dev.yingzi.local:2183/kafkaRoot -list
+
+
+./bin/kafka-topics.sh --list --zookeeper zookeeper-test.yingzi.com:2181,zookeeper-test.yingzi.com:2182,zookeeper-test.yingzi.com:2183/kafkaRoot
